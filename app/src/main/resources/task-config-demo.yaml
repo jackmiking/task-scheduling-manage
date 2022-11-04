@@ -1,0 +1,39 @@
+ufun:
+  app: hello
+  profile: test
+  version: 221104
+  over-write: true
+
+  tasks:
+    - name: aa
+      profiles: test,dev,prod,local
+      plan:
+        type: cron
+        cron: "0/30 0 0/2 * * *"
+      execute:
+        type: url
+        url: "http://ufun.com/ddd"
+        #params: ""
+        jsonBody: "{}"
+    - name: bb
+      profiles: test
+      plan:
+        type: one-time
+        planTime: 1231231230
+      execute:
+        type: ufun
+        name: hello
+        #        headers: ""
+        #        params: ""
+        jsonBody: "{}"
+    - name: cc
+      profiles: test,dev,prod
+      plan:
+        type: one-time-state
+        planTime: 1231231230
+      execute:
+        type: ufun
+        name: hello2
+        jsonBody: "{}"
+
+
