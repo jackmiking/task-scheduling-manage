@@ -1,6 +1,7 @@
 plugins {
     java
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm")
+    id("org.springframework.boot")
 }
 
 group = "com.youfun"

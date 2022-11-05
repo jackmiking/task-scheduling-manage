@@ -47,9 +47,3 @@ class TaskService {
 
 }
 
-fun main() {
-    val i100 = arrayListOf<Int>(1, 2, 3, 4, 5, 6, 7, 8)
-    val (even, odd) = i100.partition { it % 2 == 0 }
-    println(even)
-    println(odd)
-}
