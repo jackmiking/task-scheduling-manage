@@ -26,14 +26,6 @@ ufun:
         #        headers: ""
         #        params: ""
         jsonBody: "{}"
-    - name: cc
-      profiles: test,dev,prod
-      plan:
-        type: one-time-state
-        planTime: 1231231230
-      execute:
-        type: ufun
-        name: hello2
-        jsonBody: "{}"
+
 
 

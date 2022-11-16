@@ -11,7 +11,7 @@ import java.time.ZoneOffset
  * @date 2022/11/2
  */
 
-sealed class TaskTypeDetail(val type: TaskPlanType = TaskPlanType.oneTime) {
+sealed class TaskType(val type: TaskPlanType = TaskPlanType.oneTime) {
     /**
      * milliSecond
      */
@@ -30,7 +30,7 @@ enum class TaskPlanType {
 /**
  * only get time in multiExecutable
  */
-fun TaskTypeDetail.nextExecuteTime(): Long? {
+fun TaskType.nextExecuteTime(): Long? {
     if (repeatExecutable()) {
         return calLatestExecuteTime()
     } else {
@@ -41,7 +41,7 @@ fun TaskTypeDetail.nextExecuteTime(): Long? {
 /**
  * @param cron (second minute hour day-of-month month day-of-week)
  */
-data class CronTaskType(val cron: String) : TaskTypeDetail(TaskPlanType.cron) {
+data class CronTaskType(val cron: String) : TaskType(TaskPlanType.cron) {
     override fun calLatestExecuteTime(): Long {
         val item = CronExpression.parse(cron)
         val next: LocalDateTime? = item.next(LocalDateTime.now())
@@ -53,8 +53,15 @@ data class CronTaskType(val cron: String) : TaskTypeDetail(TaskPlanType.cron) {
 
 /**
  * @param planTime : when to execute this task.run only once.
+ * for example: you may have a task to modify a content table with an id 3.
+ * then subject can be content,associativeId can be 3.
+ *
  */
-data class OneTimeTaskType(val planTime: Long) : TaskTypeDetail(TaskPlanType.oneTime) {
+data class OneTimeTaskType(val planTime: Long,
+                           //only for record.make your task associate with this value.
+                           val subject:String="",
+                           //only for record. a more accurate value to associate with.
+                           val associativeId:String="") : TaskType(TaskPlanType.oneTime) {
     override fun calLatestExecuteTime(): Long {
         return planTime
     }

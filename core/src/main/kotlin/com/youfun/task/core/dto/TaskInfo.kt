@@ -5,8 +5,8 @@ package com.youfun.task.core.dto
  * @date 2022/11/2
  */
 data class TaskInfo(
-     val profiles: String,
+    val profiles: String,
     val name: String,
-    val plan: TaskTypeDetail,
-    val execute: ExecuteWayDefine
+    val plan: TaskType,
+    val execute: TaskExecutor
 )

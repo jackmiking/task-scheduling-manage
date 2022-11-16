@@ -9,21 +9,21 @@ import okhttp3.RequestBody.Companion.toRequestBody
  * @author jackmiking
  * @date 2022/11/2
  */
-sealed class ExecuteWayDefine(val type: ExecuteType = ExecuteType.url) {
 
+sealed class TaskExecutor(val type: ExecuteType = ExecuteType.url) {
+    abstract fun execute(): Pair<Int, String?>
 }
 
 enum class ExecuteType {
-    ufun, url;
+    url;
 }
 
-data class UrlExecuteWayDefine(
+data class UrlTaskExecutor(
 
     val url: String,
     val jsonBody: String,
-) : ExecuteWayDefine() {
-
-    fun execute(): Pair<Int, String?> {
+) : TaskExecutor() {
+    override fun execute(): Pair<Int, String?> {
         val request = Request.Builder().url(url)
             .post(jsonBody.toRequestBody("application/json".toMediaType())).build()
         return OkClient.client.newCall(request)
@@ -31,11 +31,4 @@ data class UrlExecuteWayDefine(
                 return response.code to response.body.toString()
             }
     }
-}
-
-data class MethodExecuteWayDefine(
-    val name: String,
-    val jsonBody: String,
-) : ExecuteWayDefine(ExecuteType.ufun) {
-
 }

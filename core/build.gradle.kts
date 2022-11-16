@@ -24,6 +24,7 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-core:$jacsonversion")
     implementation ("com.fasterxml.jackson.core:jackson-databind:$jacsonversion")
     implementation ("com.fasterxml.jackson.core:jackson-annotations:$jacsonversion")
+    implementation("org.hibernate:hibernate-validator:8.0.0.Final")
 
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
