@@ -2,6 +2,7 @@ package com.youfun.task.app.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.youfun.task.app.entity.CronTask
+import com.youfun.task.app.entity.CronTaskStatus
 import com.youfun.task.app.entity.OneTimeTask
 import com.youfun.task.app.entity.OneTimeTaskStatus
 import com.youfun.task.app.repository.CronTaskRepository
@@ -80,6 +81,7 @@ open class TaskService {
                 }
             }
             cronTaskRepository.saveAll(cronList)
+            cronTaskRepository.updateStatusByAppAndProfileAndVersionLt(CronTaskStatus.DEPRECATED.name,appInfo.app,appInfo.profile,appInfo.version)
         } catch (e: Exception) {
         } finally {
             unlock(appInfo.app, appInfo.profile, appInfo.version)

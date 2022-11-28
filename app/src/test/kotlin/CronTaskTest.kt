@@ -1,5 +1,5 @@
 import com.youfun.task.app.TaskApplication
-import com.youfun.task.app.job.JobExecutor
+import com.youfun.task.app.job.JobSchedule
 import com.youfun.task.app.repository.CronTaskRepository
 import com.youfun.task.core.dto.CronTaskType
 import com.youfun.task.core.dto.TaskInfo
@@ -24,7 +24,7 @@ class CronTaskTest {
     }
 
     @Resource
-    lateinit var jobExecutor: JobExecutor;
+    lateinit var jobSchedule: JobSchedule;
 
 
     @Test
@@ -37,7 +37,7 @@ class CronTaskTest {
             )
         )
         println(taskInfo.toString());
-        jobExecutor.executeTask(taskInfo)
+        jobSchedule.executeTask(taskInfo)
         println("go to sleep--------------")
         Thread.sleep(10000000)
         println("finish--------------")

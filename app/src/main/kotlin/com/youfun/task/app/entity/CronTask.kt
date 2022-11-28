@@ -18,7 +18,7 @@ class CronTask(
     var execute: String = "",
     var updateTime: LocalDateTime = LocalDateTime.now(),
     var version: Int = 0,
-    var status: String = CronTaskStatus.init.name,
+    var status: String = CronTaskStatus.SCHEDULING.name,
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long? = null,
@@ -26,5 +26,5 @@ class CronTask(
 }
 
 enum class CronTaskStatus {
-    `init`,scheduling, cancel
+    SCHEDULING, CANCEL,DEPRECATED
 }

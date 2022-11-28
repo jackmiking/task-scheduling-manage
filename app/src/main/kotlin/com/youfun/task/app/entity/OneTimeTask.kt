@@ -21,6 +21,7 @@ class OneTimeTask(
     val planTime: LocalDateTime = LocalDateTime.now(),
     var status: String = OneTimeTaskStatus.init.name,
     val execute: String = "",
+    val updateTime:LocalDateTime= LocalDateTime.now(),
     @Id
     @GeneratedValue
     var id: Long? = null,
