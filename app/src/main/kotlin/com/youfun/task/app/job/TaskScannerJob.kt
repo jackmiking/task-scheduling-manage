@@ -7,8 +7,7 @@ import com.youfun.task.app.repository.CronTaskRepository
 import com.youfun.task.app.repository.OneTimeTaskRepository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.annotation.Resource
 
@@ -22,22 +21,24 @@ class TaskScannerJob {
 
     @Resource
     lateinit var jobSchedule: JobSchedule
-    private var localDateTime: LocalDateTime = LocalDateTime.MIN
-    private var min = 0L
+    private var cronTaskMin: Date = Date(0)
+    private var oneTimeTaskMin = 0L
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.SECONDS)
     fun scanCronTask() {
-        val cronTaskList: List<CronTask> = cronTaskRepository.findByStatusAndUpdateTimeAfter(CronTaskStatus.SCHEDULING.name,localDateTime);
+        val cronTaskList: List<CronTask> =
+            cronTaskRepository.findByStatusAndUpdateTimeAfter(CronTaskStatus.SCHEDULING.name, cronTaskMin);
         cronTaskList.forEach(jobSchedule::scheduleCronTask)
-        localDateTime=cronTaskList.maxByOrNull { it.updateTime }?.updateTime!!
+        cronTaskMin = cronTaskList.maxByOrNull { it.updateTime }?.updateTime ?: cronTaskMin
     }
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.SECONDS)
     fun scanOneTimeTask() {
         val oneTimeTaskList = oneTimeTaskRepository.findByPlanTimeBetweenAndStatus(
-            min, System.currentTimeMillis() + TimeUnit.SECONDS.toNanos(10), OneTimeTaskStatus.`init`.name
+            Date(oneTimeTaskMin), Date(System.currentTimeMillis() + TimeUnit.SECONDS.toNanos(10)), OneTimeTaskStatus.INIT.name
         )
-        min=oneTimeTaskList.map { it.planTime.toEpochSecond(ZoneOffset.ofHours(-8)) }.maxOrNull()!!
+        oneTimeTaskMin = oneTimeTaskList.map { it.planTime.time }.maxOrNull() ?: oneTimeTaskMin
+        oneTimeTaskMin+=1
         oneTimeTaskList.forEach(jobSchedule::scheduleOneTimeTask)
 
     }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
+import java.util.*
 
 /**
  * @author jackmiking
@@ -14,7 +15,9 @@ import java.time.LocalDateTime
  */
 @Repository
 interface CronTaskRepository : CrudRepository<CronTask, Long>, JpaSpecificationExecutor<CronTask> {
-    fun findByStatusAndUpdateTimeAfter(status: String, date: LocalDateTime): List<CronTask>
+    fun findByStatusAndUpdateTimeAfter(status: String, date: Date): List<CronTask>
+    fun findByStatus(status: String): List<CronTask>
+    fun findAllByStatusEqualsAndUpdateTimeAfter(status: String, date: LocalDateTime): List<CronTask>
     fun existsByAppAndProfileAndVersion(app: String, profile: String, version: Int): Boolean
     fun deleteAllByAppAndProfileAndVersion(app: String, profile: String, version: Int): Int
 

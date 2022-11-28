@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.youfun.task.app.entity.CronTask
 import com.youfun.task.app.entity.OneTimeTask
 import com.youfun.task.core.dto.*
-import java.time.LocalTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import org.slf4j.LoggerFactory
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import javax.annotation.Resource
@@ -33,6 +31,7 @@ class DefaultJobSchedule : JobSchedule {
         return cronTasks?.version.equals(version) && cronTasks?.updateTime?.equals(updateTime) ?: false
     }
 
+    val logger = LoggerFactory.getLogger("executeTask")
     private fun executeTask(
         app: String,
         profile: String,
@@ -46,16 +45,22 @@ class DefaultJobSchedule : JobSchedule {
                 if (validVersion(app, profile, version, updateTime)) {
                     executeTask(app, profile, version, updateTime, plan, executor)
                 } else {
+                    logger.debug("task/deprecated:{},{},{},{} is out of version.", app, profile, version, updateTime)
                     return@schedule
                 }
             }
             try {
-                val localTime = LocalTime.now()
-                println("start execute")
-                val pair = executor.execute()
-                println("time:{},pair:{}".format(localTime.format(DateTimeFormatter.ISO_LOCAL_TIME), pair.toString()))
+                val result = executor.execute()
+                logger.info(
+                    "task/executed:{},{},{},{},result[code:{},message:{}]",plan,
+                    app,
+                    profile,
+                    version,
+                    result.first,
+                    result.second
+                )
             } catch (e: Exception) {
-                println(e.message)
+                logger.error(e.message)
             }
 
         }, plan.calLatestExecuteTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
@@ -64,11 +69,10 @@ class DefaultJobSchedule : JobSchedule {
     override fun scheduleOneTimeTask(oneTimeTask: OneTimeTask) {
         val urlTaskExecutor = objectMapper.readValue<UrlTaskExecutor>(oneTimeTask.execute, UrlTaskExecutor::class.java)
         oneTimeTask.run {
-
             executeTask(
-                app, profile, id.toString(), updateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli(),
+                app, profile, id.toString(), updateTime.time,
                 OneTimeTaskType(
-                    planTime.toEpochSecond(ZoneOffset.ofHours(-8)), subject, associateId
+                    planTime.time, subject, subjectId
                 ),
                 urlTaskExecutor
             )
@@ -78,7 +82,7 @@ class DefaultJobSchedule : JobSchedule {
     override fun scheduleCronTask(cronTask: CronTask) {
         val urlTaskExecutor = objectMapper.readValue<UrlTaskExecutor>(cronTask.execute, UrlTaskExecutor::class.java)
         cronTask.run {
-            val time = updateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli()
+            val time = updateTime.time
             map.put(String.format("%s-%s", app, profile), CronTasks(version.toString(), time))
             executeTask(
                 app,

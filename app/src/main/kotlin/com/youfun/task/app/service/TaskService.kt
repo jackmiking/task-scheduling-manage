@@ -11,9 +11,7 @@ import com.youfun.task.core.dto.CronTaskType
 import com.youfun.task.core.dto.OneTimeTaskType
 import com.youfun.task.core.dto.request.app.AddTasksRequest
 import org.springframework.stereotype.Service
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.util.*
 import javax.annotation.Resource
 import javax.transaction.Transactional
 
@@ -42,7 +40,7 @@ open class TaskService {
                 when (val plan = it.plan) {
                     is CronTaskType -> {
                         CronTask(
-                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute), LocalDateTime.now(),
+                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute), Date(),
                             appInfo.version
                         )
                     }
@@ -50,8 +48,8 @@ open class TaskService {
                     is OneTimeTaskType -> {
                         OneTimeTask(
                             appInfo.app, appInfo.profile, it.name, plan.subject, plan.associativeId,
-                            LocalDateTime.ofInstant(Instant.ofEpochMilli(plan.planTime), ZoneId.of("+8")),
-                            OneTimeTaskStatus.`init`.name, it.execute.toString()
+                            Date(plan.planTime),
+                            OneTimeTaskStatus.INIT.name, it.execute.toString()
                         )
                     }
                 }
@@ -81,7 +79,12 @@ open class TaskService {
                 }
             }
             cronTaskRepository.saveAll(cronList)
-            cronTaskRepository.updateStatusByAppAndProfileAndVersionLt(CronTaskStatus.DEPRECATED.name,appInfo.app,appInfo.profile,appInfo.version)
+            cronTaskRepository.updateStatusByAppAndProfileAndVersionLt(
+                CronTaskStatus.DEPRECATED.name,
+                appInfo.app,
+                appInfo.profile,
+                appInfo.version
+            )
         } catch (e: Exception) {
         } finally {
             unlock(appInfo.app, appInfo.profile, appInfo.version)

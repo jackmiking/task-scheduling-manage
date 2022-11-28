@@ -20,15 +20,15 @@ enum class ExecuteType {
 
 data class UrlTaskExecutor(
 
-    val url: String,
-    val jsonBody: String,
+    val url: String="",
+    val jsonBody: String="",
 ) : TaskExecutor() {
     override fun execute(): Pair<Int, String?> {
         val request = Request.Builder().url(url)
             .post(jsonBody.toRequestBody("application/json".toMediaType())).build()
         return OkClient.client.newCall(request)
             .execute().use { response ->
-                return response.code to response.body.toString()
+                return response.code to response.body?.string()
             }
     }
 }
