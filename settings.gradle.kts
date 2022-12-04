@@ -11,3 +11,4 @@ rootProject.name = "task-scheduling-manage"
 include("core")
 include("app")
 include("executor-core")
+include("spring-starter")

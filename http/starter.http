@@ -1,0 +1,4 @@
+POST http://localhost:8888/ufun/cronTask/execute
+content-type: application/json
+
+{"dd": "dd"}

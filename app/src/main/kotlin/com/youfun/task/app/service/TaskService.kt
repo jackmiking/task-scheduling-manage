@@ -34,12 +34,13 @@ open class TaskService(@Autowired open  var cronTaskRepository: CronTaskReposito
     }
 
     fun addTasks(tasksRequest: AddTasksRequest) {
+        val updateTime=Date()
         tasksRequest.run {
             var (cronList, oneTimeList) = taskInfoList.map {
                 when (val plan = it.plan) {
                     is CronTaskType -> {
                         CronTask(
-                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute), Date(),
+                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute),updateTime,
                             appInfo.version
                         )
                     }

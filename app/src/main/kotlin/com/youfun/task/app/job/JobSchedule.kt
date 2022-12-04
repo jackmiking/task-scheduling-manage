@@ -36,6 +36,7 @@ class DefaultJobSchedule : JobSchedule {
         app: String,
         profile: String,
         version: String,
+        name: String,
         updateTime: Long,
         plan: TaskType,
         executor: TaskExecutor
@@ -43,19 +44,26 @@ class DefaultJobSchedule : JobSchedule {
         executorService.schedule({
             if (plan.repeatExecutable()) {
                 if (validVersion(app, profile, version, updateTime)) {
-                    executeTask(app, profile, version, updateTime, plan, executor)
+                    executeTask(app, profile, version, name, updateTime, plan, executor)
                 } else {
-                    logger.debug("task/deprecated:{},{},{},{} is out of version.", app, profile, version, updateTime)
+                    logger.info(
+                        "task/deprecated:{},{},{},{},{} is out of version.",
+                        app,
+                        profile,
+                        version,
+                        name,
+                        updateTime
+                    )
                     return@schedule
                 }
             }
             try {
-                val result = executor.execute()
+                val result = executor.execute(name)
                 logger.info(
-                    "task/executed:{},{},{},{},result[code:{},message:{}]",plan,
+                    "task/executed:{},{},{},{},{},result[code:{},message:{}]", name,
                     app,
                     profile,
-                    version,
+                    version,executor,
                     result.first,
                     result.second
                 )
@@ -70,7 +78,7 @@ class DefaultJobSchedule : JobSchedule {
         val urlTaskExecutor = objectMapper.readValue<UrlTaskExecutor>(oneTimeTask.execute, UrlTaskExecutor::class.java)
         oneTimeTask.run {
             executeTask(
-                app, profile, id.toString(), updateTime.time,
+                app, profile, id.toString(), oneTimeTask.name, updateTime.time,
                 OneTimeTaskType(
                     planTime.time, subject, subjectId
                 ),
@@ -88,7 +96,7 @@ class DefaultJobSchedule : JobSchedule {
             executeTask(
                 app,
                 profile,
-                version.toString(),
+                version.toString(), cronTask.name,
                 time,
                 CronTaskType(cronTask.cron),
                 urlTaskExecutor

@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.JsonNode
  * @author jackmiking
  * @date 2022/11/4
  */
-class EndpointRequest(
-    val methodName: String,
-    val jsonBody: JsonNode? = null
+class CronCallbackRequest(
+    val name: String,
+    val body: String? = null
 ) {
 
 }

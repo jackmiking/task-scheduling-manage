@@ -1,0 +1,9 @@
+
+ufun.task:
+  app-name: starter
+  app-profile: test
+  manager-host: http://localhost:8080
+  callback-host: http://localhost:8888
+
+server:
+  port: 8888

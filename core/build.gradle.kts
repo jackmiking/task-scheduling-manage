@@ -18,7 +18,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.+")
     implementation ("com.fasterxml.jackson.core:jackson-core:$jacsonversion")
