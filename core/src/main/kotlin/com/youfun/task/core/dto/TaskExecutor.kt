@@ -1,5 +1,7 @@
 package com.youfun.task.core.dto
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonTypeName
 import com.youfun.task.core.client.OkClient
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -9,15 +11,15 @@ import okhttp3.RequestBody.Companion.toRequestBody
  * @author jackmiking
  * @date 2022/11/2
  */
-
-sealed class TaskExecutor(val type: ExecuteType = ExecuteType.url) {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type",defaultImpl = UrlTaskExecutor::class)
+sealed class TaskExecutor(val type: ExecuteType = ExecuteType.URL) {
     abstract fun execute(): Pair<Int, String?>
 }
 
 enum class ExecuteType {
-    url;
+    URL;
 }
-
+@JsonTypeName("URL")
 data class UrlTaskExecutor(
 
     val url: String="",

@@ -1,0 +1,105 @@
+# overwrite false
+POST localhost:8080/api/task/add
+Content-Type: application/json
+
+{
+  "appInfo": {
+    "app": "helloapp",
+    "profile": "test",
+    "version": 221111,
+    "overWrite": false
+  },
+  "taskInfoList": [
+    {
+      "name": "hello4",
+      "plan": {
+        "type": "CRON",
+        "cron": "0/7 * * * * *"
+      },
+      "execute": {
+        "type": "URL",
+        "url": "http://localhost:8080/api/task/callbackTest",
+        "jsonBody": "{\"name\":\"hello4\"}"
+      }
+    }
+  ]
+}
+
+###
+POST localhost:8080/api/task/add
+Content-Type: application/json
+
+{
+  "appInfo": {
+    "app": "helloapp",
+    "profile": "test",
+    "version": 221111,
+    "overWrite": true
+  },
+  "taskInfoList": [
+    {
+      "name": "hello4",
+      "plan": {
+        "type": "CRON",
+        "cron": "0/7 * * * * *"
+      },
+      "execute": {
+        "type": "URL",
+        "url": "http://localhost:8080/api/task/callbackTest",
+        "jsonBody": "{\"name\":\"hello4\"}"
+      }
+    }
+  ]
+}
+### register lower version
+POST localhost:8080/api/task/add
+Content-Type: application/json
+
+{
+  "appInfo": {
+    "app": "helloapp",
+    "profile": "test",
+    "version": 221110,
+    "overWrite": false
+  },
+  "taskInfoList": [
+    {
+      "name": "hello4",
+      "plan": {
+        "type": "CRON",
+        "cron": "0/7 * * * * *"
+      },
+      "execute": {
+        "type": "URL",
+        "url": "http://localhost:8080/api/task/callbackTest",
+        "jsonBody": "{\"name\":\"hello4\"}"
+      }
+    }
+  ]
+}
+### register higher version
+POST localhost:8080/api/task/add
+Content-Type: application/json
+
+{
+  "appInfo": {
+    "app": "helloapp",
+    "profile": "test",
+    "version": 221112,
+    "overWrite": false
+  },
+  "taskInfoList": [
+    {
+      "name": "hello4",
+      "plan": {
+        "type": "CRON",
+        "cron": "0/5 * * * * *"
+      },
+      "execute": {
+        "type": "URL",
+        "url": "http://localhost:8080/api/task/callbackTest",
+        "jsonBody": "{\"name\":\"hello4\"}"
+      }
+    }
+  ]
+}

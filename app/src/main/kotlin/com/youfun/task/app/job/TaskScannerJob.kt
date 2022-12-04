@@ -35,10 +35,12 @@ class TaskScannerJob {
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.SECONDS)
     fun scanOneTimeTask() {
         val oneTimeTaskList = oneTimeTaskRepository.findByPlanTimeBetweenAndStatus(
-            Date(oneTimeTaskMin), Date(System.currentTimeMillis() + TimeUnit.SECONDS.toNanos(10)), OneTimeTaskStatus.INIT.name
+            Date(oneTimeTaskMin),
+            Date(System.currentTimeMillis() + TimeUnit.SECONDS.toNanos(10)),
+            OneTimeTaskStatus.INIT.name
         )
         oneTimeTaskMin = oneTimeTaskList.map { it.planTime.time }.maxOrNull() ?: oneTimeTaskMin
-        oneTimeTaskMin+=1
+        oneTimeTaskMin += 1
         oneTimeTaskList.forEach(jobSchedule::scheduleOneTimeTask)
 
     }

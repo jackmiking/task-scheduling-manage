@@ -8,8 +8,8 @@ import com.youfun.task.core.dto.TaskInfo
  * @date 2022/11/4
  */
 class AddTasksRequest(
-    val appInfo:AppInfo,
-    val taskInfoList:List<TaskInfo>
+    val appInfo: AppInfo,
+    val taskInfoList: List<TaskInfo>
 ) {
-
+    public constructor() : this(AppInfo(), listOf())
 }

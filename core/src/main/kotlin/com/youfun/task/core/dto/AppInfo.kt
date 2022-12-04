@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length
 data class AppInfo(
     @Length(max = 30)
     val app: String, @Length(max=15) val profile: String, val version: Int,
-    val overWrite: Boolean = true
+    val overWrite: Boolean = false
 ) {
+    constructor():this("","",0,false)
 }

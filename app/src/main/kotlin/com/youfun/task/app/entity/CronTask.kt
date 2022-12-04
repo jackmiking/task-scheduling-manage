@@ -21,7 +21,7 @@ class CronTask(
     var version: Int = 0,
     var status: String = CronTaskStatus.SCHEDULING.name,
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 ) {
 }

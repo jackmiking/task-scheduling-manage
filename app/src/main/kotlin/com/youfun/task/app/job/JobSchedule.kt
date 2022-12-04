@@ -81,6 +81,7 @@ class DefaultJobSchedule : JobSchedule {
 
     override fun scheduleCronTask(cronTask: CronTask) {
         val urlTaskExecutor = objectMapper.readValue<UrlTaskExecutor>(cronTask.execute, UrlTaskExecutor::class.java)
+
         cronTask.run {
             val time = updateTime.time
             map.put(String.format("%s-%s", app, profile), CronTasks(version.toString(), time))

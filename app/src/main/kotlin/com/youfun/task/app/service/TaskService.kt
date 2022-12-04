@@ -10,6 +10,9 @@ import com.youfun.task.core.dto.AppInfo
 import com.youfun.task.core.dto.CronTaskType
 import com.youfun.task.core.dto.OneTimeTaskType
 import com.youfun.task.core.dto.request.app.AddTasksRequest
+import lombok.extern.slf4j.Slf4j
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.annotation.Resource
@@ -19,17 +22,13 @@ import javax.transaction.Transactional
  * @author jackmiking
  * @date 2022/11/4
  */
+
 @Service
-open class TaskService {
+open class TaskService(@Autowired open  var cronTaskRepository: CronTaskRepository
+                       , @Resource open var oneTimeTaskService: OneTimeTaskService,
+                       @Autowired open var objectMapper: ObjectMapper) {
 
-    @Resource
-    lateinit var cronTaskRepository: CronTaskRepository;
 
-    @Resource
-    lateinit var oneTimeTaskService: OneTimeTaskService
-
-    @Resource
-    lateinit var objectMapper: ObjectMapper
     fun toString(obj: Any): String {
         return objectMapper.writeValueAsString(obj)
     }
@@ -47,7 +46,7 @@ open class TaskService {
 
                     is OneTimeTaskType -> {
                         OneTimeTask(
-                            appInfo.app, appInfo.profile, it.name, plan.subject, plan.associativeId,
+                            appInfo.app, appInfo.profile, it.name, plan.subject, plan.subjectId,
                             Date(plan.planTime),
                             OneTimeTaskStatus.INIT.name, it.execute.toString()
                         )
@@ -86,6 +85,8 @@ open class TaskService {
                 appInfo.version
             )
         } catch (e: Exception) {
+            val log=LoggerFactory.getLogger(TaskService::class.java)
+            log.error(e.message,e)
         } finally {
             unlock(appInfo.app, appInfo.profile, appInfo.version)
         }

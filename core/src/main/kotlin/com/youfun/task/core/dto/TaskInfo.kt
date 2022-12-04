@@ -9,4 +9,6 @@ data class TaskInfo(
     val name: String,
     val plan: TaskType,
     val execute: TaskExecutor
-)
+){
+    constructor():this("","",CronTaskType(),UrlTaskExecutor())
+}
