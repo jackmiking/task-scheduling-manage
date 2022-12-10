@@ -41,7 +41,7 @@ class UfunScheduledAnnotationBeanPostProcessor : BeanPostProcessor {
             if (!annotatedMethods.isEmpty()) {
                 // Non-empty set of methods
                 annotatedMethods.forEach {
-                    ufunTaskRegistrar.registCronTask(it.value, it.key)
+                    ufunTaskRegistrar.registCronTask(it.value, it.key,bean)
                 }
             }
         }

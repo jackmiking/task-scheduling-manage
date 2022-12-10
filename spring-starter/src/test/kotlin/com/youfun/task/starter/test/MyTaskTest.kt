@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 class MyTaskTest {
 
     @CronScheduled("starter-1", "0/10 * * * * *",["test","prod"])
-    fun hell0(body: String) {
-        println(body)
+    fun hell0(name:String,body: String) {
+        println(String.format("hello: name:%s,body:%s",name,body))
     }
 }
