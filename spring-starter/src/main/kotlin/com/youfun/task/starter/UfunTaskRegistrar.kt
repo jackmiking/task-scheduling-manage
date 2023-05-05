@@ -11,17 +11,17 @@ import com.youfun.task.starter.annotations.CronScheduled
 import com.youfun.task.starter.config.UfunTaskProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestParam
 import java.lang.reflect.Method
-import javax.annotation.Resource
 
 @Component
 class UfunTaskRegistrar(
-    @Resource private val ufunTaskProperties: UfunTaskProperties,
-    @Resource private val taskRegisterClient: TaskRegisterClient
+    @Autowired private val ufunTaskProperties: UfunTaskProperties,
+    @Autowired private val taskRegisterClient: TaskRegisterClient
 ) :
     ApplicationListener<ContextRefreshedEvent> {
     private val log: Logger = LoggerFactory.getLogger(UfunTaskRegistrar::class.java)
@@ -65,17 +65,17 @@ class UfunTaskRegistrar(
             if (parammeter.type == String::class || parammeter.type == String::class.java) {
                 if (parammeter.isAnnotationPresent(RequestParam::class.java)) {
                     val requestParam: RequestParam = parammeter.getAnnotation(RequestParam::class.java)
-                        if (requestParam.name == "body") {
-                            params.add(callbackRequest.body)
-                        } else if (requestParam.name == "name") {
-                            params.add(callbackRequest.name)
-                        } else {
-                            params.add("")
-                        }
+                    if (requestParam.name == "body") {
+                        params.add(callbackRequest.body)
+                    } else if (requestParam.name == "name") {
+                        params.add(callbackRequest.name)
+                    } else {
+                        params.add("")
+                    }
                 } else {
                     params.add("")
                 }
-            } else if (parammeter.type.equals(CronCallbackRequest::class)||parammeter.type.equals(CronCallbackRequest::class.java)) {
+            } else if (parammeter.type.equals(CronCallbackRequest::class) || parammeter.type.equals(CronCallbackRequest::class.java)) {
                 params.add(callbackRequest)
             } else {
                 params.add(null)

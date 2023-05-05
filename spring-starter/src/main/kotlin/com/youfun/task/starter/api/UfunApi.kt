@@ -2,11 +2,11 @@ package com.youfun.task.starter.api
 
 import com.youfun.task.core.dto.request.core.CronCallbackRequest
 import com.youfun.task.starter.UfunTaskRegistrar
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.annotation.Resource
 
 /**
  * @author jackmiking
@@ -15,7 +15,7 @@ import javax.annotation.Resource
 @RestController
 @RequestMapping("/ufun")
 class UfunApi {
-    @Resource
+    @Autowired
     lateinit var ufunTaskRegistrar: UfunTaskRegistrar
 
     @PostMapping("cronTask/execute")
