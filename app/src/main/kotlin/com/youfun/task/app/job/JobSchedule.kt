@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.youfun.task.app.entity.CronTask
 import com.youfun.task.app.entity.OneTimeTask
 import com.youfun.task.core.dto.*
+import jakarta.annotation.Resource
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
-import javax.annotation.Resource
 
 interface JobSchedule {
 
@@ -63,7 +63,7 @@ class DefaultJobSchedule : JobSchedule {
                     "task/executed:{},{},{},{},{},result[code:{},message:{}]", name,
                     app,
                     profile,
-                    version,executor,
+                    version, executor,
                     result.first,
                     result.second
                 )

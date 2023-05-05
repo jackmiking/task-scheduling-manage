@@ -6,26 +6,30 @@
  */
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val kotlinVersion = "1.8.10"
+val mapstructVersion="1.5.5.Final"
+
 plugins {
-    id("org.springframework.boot") version "2.7.5" apply false
+    val kotlinVersion = "1.8.10"
+    id("org.springframework.boot") version "3.0.6" apply false
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
-    kotlin("plugin.lombok") version "1.6.21"
-    id("io.freefair.lombok") version "5.3.0"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("plugin.lombok") version kotlinVersion
+    id("io.freefair.lombok") version "8.0.1"
 }
 
 group = "com.youfun"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 dependencyManagement {
@@ -35,16 +39,7 @@ dependencyManagement {
 }
 
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
-    }
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
 subprojects {
     apply {
         plugin("java")
@@ -54,16 +49,22 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation(kotlin("stdlib"))
-        implementation("org.mapstruct:mapstruct:1.5.2.Final")
-        annotationProcessor("org.mapstruct:mapstruct-processor:1.5.2.Final")
-        testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.2.Final")
+        implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+        annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+        testAnnotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     }
     dependencyManagement {
         imports {
             mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.3")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
+        }
+    }
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "17"
         }
     }
     tasks.named<Test>("test") {

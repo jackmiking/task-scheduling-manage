@@ -3,11 +3,11 @@ package com.youfun.task.app.api
 import com.youfun.task.app.service.TaskService
 import com.youfun.task.core.api.ApiResponse
 import com.youfun.task.core.dto.request.app.AddTasksRequest
+import jakarta.annotation.Resource
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.annotation.Resource
 
 /**
  * @author jackmiking

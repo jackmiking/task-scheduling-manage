@@ -1,6 +1,6 @@
 
-drop table ufun_cron_task;
-drop table ufun_one_time_task;
+drop table if exists ufun_cron_task;
+drop table if exists ufun_one_time_task;
 create table if not exists ufun_cron_task
 (
     id          bigint      not null primary key auto_increment,

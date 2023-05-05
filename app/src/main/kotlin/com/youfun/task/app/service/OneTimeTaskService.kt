@@ -2,8 +2,8 @@ package com.youfun.task.app.service
 
 import com.youfun.task.app.entity.OneTimeTask
 import com.youfun.task.app.repository.OneTimeTaskRepository
+import jakarta.annotation.Resource
 import org.springframework.stereotype.Service
-import javax.annotation.Resource
 
 @Service
 class OneTimeTaskService {

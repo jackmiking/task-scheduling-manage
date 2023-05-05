@@ -10,13 +10,12 @@ import com.youfun.task.core.dto.AppInfo
 import com.youfun.task.core.dto.CronTaskType
 import com.youfun.task.core.dto.OneTimeTaskType
 import com.youfun.task.core.dto.request.app.AddTasksRequest
-import lombok.extern.slf4j.Slf4j
+import jakarta.annotation.Resource
+import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
-import javax.annotation.Resource
-import javax.transaction.Transactional
 
 /**
  * @author jackmiking
@@ -24,9 +23,11 @@ import javax.transaction.Transactional
  */
 
 @Service
-open class TaskService(@Autowired open  var cronTaskRepository: CronTaskRepository
-                       , @Resource open var oneTimeTaskService: OneTimeTaskService,
-                       @Autowired open var objectMapper: ObjectMapper) {
+open class TaskService(
+    @Autowired open var cronTaskRepository: CronTaskRepository,
+    @Resource open var oneTimeTaskService: OneTimeTaskService,
+    @Autowired open var objectMapper: ObjectMapper
+) {
 
 
     fun toString(obj: Any): String {
@@ -34,13 +35,13 @@ open class TaskService(@Autowired open  var cronTaskRepository: CronTaskReposito
     }
 
     fun addTasks(tasksRequest: AddTasksRequest) {
-        val updateTime=Date()
+        val updateTime = Date()
         tasksRequest.run {
             var (cronList, oneTimeList) = taskInfoList.map {
                 when (val plan = it.plan) {
                     is CronTaskType -> {
                         CronTask(
-                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute),updateTime,
+                            appInfo.app, appInfo.profile, it.name, plan.cron, toString(it.execute), updateTime,
                             appInfo.version
                         )
                     }
@@ -86,8 +87,8 @@ open class TaskService(@Autowired open  var cronTaskRepository: CronTaskReposito
                 appInfo.version
             )
         } catch (e: Exception) {
-            val log=LoggerFactory.getLogger(TaskService::class.java)
-            log.error(e.message,e)
+            val log = LoggerFactory.getLogger(TaskService::class.java)
+            log.error(e.message, e)
         } finally {
             unlock(appInfo.app, appInfo.profile, appInfo.version)
         }

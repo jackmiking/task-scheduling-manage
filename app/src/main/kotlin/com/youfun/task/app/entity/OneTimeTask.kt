@@ -1,11 +1,10 @@
 package com.youfun.task.app.entity
 
-import java.time.LocalDateTime
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Table
 
 /**
  * @author jackmiking
@@ -22,7 +21,7 @@ class OneTimeTask(
     val planTime: Date = Date(),
     var status: String = OneTimeTaskStatus.INIT.name,
     val execute: String = "",
-    val updateTime:Date= Date(),
+    val updateTime: Date = Date(),
     @Id
     @GeneratedValue
     var id: Long? = null,

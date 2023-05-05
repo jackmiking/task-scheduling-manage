@@ -5,11 +5,11 @@ import com.youfun.task.app.entity.CronTaskStatus
 import com.youfun.task.app.entity.OneTimeTaskStatus
 import com.youfun.task.app.repository.CronTaskRepository
 import com.youfun.task.app.repository.OneTimeTaskRepository
+import jakarta.annotation.Resource
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.annotation.Resource
 
 @Service
 class TaskScannerJob {

@@ -1,8 +1,7 @@
 package com.youfun.task.app.entity
 
-import java.time.LocalDateTime
+import jakarta.persistence.*
 import java.util.*
-import javax.persistence.*
 
 
 /**
@@ -27,5 +26,5 @@ class CronTask(
 }
 
 enum class CronTaskStatus {
-    SCHEDULING, CANCEL,DEPRECATED
+    SCHEDULING, CANCEL, DEPRECATED
 }
